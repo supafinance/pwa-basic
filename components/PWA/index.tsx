@@ -72,6 +72,7 @@ export const PWA = () => {
     const subscribeToPush = async () => {
         let swRegistration = await navigator.serviceWorker.getRegistration()
         if (!swRegistration) {
+            toast.error('Service worker not registered')
             throw new Error('Service worker not registered')
         }
         let pushManager = swRegistration.pushManager;
