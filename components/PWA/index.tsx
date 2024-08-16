@@ -11,6 +11,7 @@ export const PWA = () => {
     const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | null>(null);
     const [pushSubscription, setPushSubscription] = useState<PushSubscription | null>(null);
 
+    console.log('swRegistration', swRegistration)
     useEffect(() => {
         console.log('PWA component mounted')
         if ('serviceWorker' in navigator) {
@@ -140,7 +141,7 @@ export const PWA = () => {
     }
 
     return (
-        <>
+        <div className="flex flex-col gap-y-6">
             {!pushSubscription && (
                 <Button onClick={subscribeToPush}>Subscribe to Push Notifications</Button>
             )}
@@ -151,9 +152,37 @@ export const PWA = () => {
                     <div>Active Subscription: {JSON.stringify(pushSubscription)}</div>
                 </div>
             )}
-        </>
+            <div>
+                push subscription:
+                {JSON.stringify(pushSubscription)}
+            </div>
+            <div>
+                service worker registration:
+                {stringifyServiceWorkerRegistration(swRegistration)}
+            </div>
+        </div>
     )
 }
+
+const stringifyServiceWorkerRegistration = (registration: ServiceWorkerRegistration | null): string => {
+    if (!registration) return 'null';
+    return JSON.stringify({
+        scope: registration.scope,
+        active: registration.active ? {
+            scriptURL: registration.active.scriptURL,
+            state: registration.active.state
+        } : null,
+        installing: registration.installing ? {
+            scriptURL: registration.installing.scriptURL,
+            state: registration.installing.state
+        } : null,
+        waiting: registration.waiting ? {
+            scriptURL: registration.waiting.scriptURL,
+            state: registration.waiting.state
+        } : null,
+        updateViaCache: registration.updateViaCache
+    }, null, 2);
+};
 
 // import { useEffect, useState } from 'react'
 // import Head from 'next/head'
