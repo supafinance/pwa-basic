@@ -70,25 +70,50 @@ export const PWA = () => {
     }
 
     const subscribeToPush = async () => {
-        if (!swRegistration) return
-
-        const subscriptionOptions = {
+        let swRegistration = await navigator.serviceWorker.getRegistration()
+        if (!swRegistration) {
+            throw new Error('Service worker not registered')
+        }
+        let pushManager = swRegistration.pushManager;
+        if (!isPushManagerActive(pushManager)) {
+            return;
+        }
+        let subscriptionOptions = {
             userVisibleOnly: true,
             applicationServerKey: VAPID_PUBLIC_KEY
-        }
-
-        console.log('Subscription options:', subscriptionOptions)
-
+        };
         try {
-            const subscription = await swRegistration.pushManager.subscribe(subscriptionOptions)
+            let subscription = await pushManager.subscribe(subscriptionOptions)
             setPushSubscription(subscription)
             toast.success('Successfully subscribed to push notifications')
-            // Here you can send fetch request with subscription data to your backend API
+            // Here you can send fetch request with subscription data to your backend API for next push sends from there
         } catch (error) {
             toast.error('Failed to subscribe to push notifications')
             console.error('Push subscription failed:', error)
         }
+
     }
+    
+    // const subscribeToPush = async () => {
+    //     if (!swRegistration) return
+    //
+    //     const subscriptionOptions = {
+    //         userVisibleOnly: true,
+    //         applicationServerKey: VAPID_PUBLIC_KEY
+    //     }
+    //
+    //     console.log('Subscription options:', subscriptionOptions)
+    //
+    //     try {
+    //         const subscription = await swRegistration.pushManager.subscribe(subscriptionOptions)
+    //         setPushSubscription(subscription)
+    //         toast.success('Successfully subscribed to push notifications')
+    //         // Here you can send fetch request with subscription data to your backend API
+    //     } catch (error) {
+    //         toast.error('Failed to subscribe to push notifications')
+    //         console.error('Push subscription failed:', error)
+    //     }
+    // }
 
     const testSend = () => {
         if (!swRegistration) return
