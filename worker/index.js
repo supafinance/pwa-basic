@@ -29,3 +29,13 @@ self.addEventListener('notificationclick', function (event) {
             // fetch('https://your_backend_server.com/track_click?message_id=' + pushData.data.message_id);
         });
 });
+
+self.addEventListener("install", (event) => {
+    // The promise that skipWaiting() returns can be safely ignored.
+    console.log('we got here')
+    self.skipWaiting();
+
+    // Perform any other actions required for your
+    // service worker to install, potentially inside
+    // of event.waitUntil();
+});
