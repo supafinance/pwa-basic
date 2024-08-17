@@ -26,5 +26,13 @@ self.addEventListener('notificationclick', function (event) {
     // fetch('https://your_backend_server.com/track_click?message_id=' + pushData.data.message_id);
   });
 });
+self.addEventListener('install', event => {
+  console.log('Service Worker installing.');
+  self.skipWaiting();
+});
+self.addEventListener('activate', event => {
+  console.log('Service Worker activated.');
+});
+console.log('Service Worker script loaded');
 /******/ })()
 ;
