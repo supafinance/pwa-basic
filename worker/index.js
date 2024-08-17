@@ -13,7 +13,6 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', function (event) {
     event.notification.close();
-
     if (!event.notification.data) {
         console.error('Click on WebPush with empty data, where url should be. Notification: ', event.notification)
         return;
@@ -22,7 +21,6 @@ self.addEventListener('notificationclick', function (event) {
         console.error('Click on WebPush without url. Notification: ', event.notification)
         return;
     }
-
     clients.openWindow(event.notification.data.url)
         .then(() => {
             // You can send fetch request to your analytics API fact that push was clicked
@@ -30,12 +28,14 @@ self.addEventListener('notificationclick', function (event) {
         });
 });
 
-self.addEventListener("install", (event) => {
-    // The promise that skipWaiting() returns can be safely ignored.
-    console.log('we got here')
+self.addEventListener('install', (event) => {
+    console.log('Service Worker installing.');
     self.skipWaiting();
-
-    // Perform any other actions required for your
-    // service worker to install, potentially inside
-    // of event.waitUntil();
 });
+
+self.addEventListener('activate', (event) => {
+    console.log('Service Worker activated.');
+});
+
+console.log('Service Worker script loaded');
+
