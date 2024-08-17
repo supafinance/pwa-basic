@@ -18,6 +18,17 @@ const siteConfig = {
   },
 }
 
+export default function RootLayout({
+                                     children,
+                                   }: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+      <html lang="en">
+      <body className={inter.className}><ServiceWorkerRegistration /><PWA/>{children}<Toaster/></body>
+      </html>
+  );
+}
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -68,15 +79,4 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     statusBarStyle: 'black',
   },
-}
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body className={inter.className}><PWA />{children}<Toaster /></body>
-    </html>
-  );
 }
